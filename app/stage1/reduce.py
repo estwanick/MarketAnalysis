@@ -28,5 +28,6 @@ for line in sys.stdin:
         month = cMonth
 
 # do not forget to output the last word if needed!
-# if (current_word == word) and (current_state == state):
-#     print '%s\t%s\t%s' % (current_state, current_word, current_count)
+if (ticker == cTicker) and (month == cMonth) and (year == cYear):
+    print '%s,%s,%s,%s' % (ticker, year, month, sumClosingPrice)
+    
