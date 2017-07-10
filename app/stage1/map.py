@@ -4,19 +4,6 @@ from datetime import datetime
 
 PATH = os.environ['mapreduce_map_input_file']
 FILENAME = re.search('[^\/]+(\w+)$', PATH).group().replace('.csv', '')
-MONTHS = ["Unknown",
-          "January",
-          "Febuary",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"]
 
 idx = 0
 for line in sys.stdin:
@@ -26,7 +13,8 @@ for line in sys.stdin:
     if idx != 0:
         rowDate = datetime.strptime(str(row[0]), '%Y-%m-%d')
         rowYear = str(rowDate.year)
-        rowMonth = MONTHS[rowDate.month]
+        rowMonth = str(rowDate.month)
+        openingPrice = row[1]
         closingPrice = row[4]
-        print FILENAME + "," + rowYear + "," + rowMonth + "," + closingPrice
+        print FILENAME + "," + rowYear + "," + rowMonth + "," + openingPrice + "," + closingPrice
     idx = idx + 1
