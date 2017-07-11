@@ -27,10 +27,10 @@ ticker, month, year, (stdev per month)
 # sample key order
 stream.num.map.output.key.fields=5  -D map.output.key.field.separator=, -D mapred.text.key.comparator.options='-k1,1 -k2,3n -k3,2n'
 # run map and do nothing, then sort by '-k1,1 -k2,3n -k3,2n'
-FB 1 2010 7.14022
-FB 1 2011 7.10422
-FB 1 2012 7.305422
-FB 1 2013 7.103422
-FB 1 2014 predict this 
+- FB 1 2010 7.14022
+- FB 1 2011 7.10422
+- FB 1 2012 7.305422
+- FB 1 2013 7.103422
+- FB 1 2014 predict this 
 
 # what is acceptable range? +-.5
