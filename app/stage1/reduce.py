@@ -25,7 +25,7 @@ for line in sys.stdin:
         dailyClosingPrices.append(cClosingPrice)
     else:
         if ticker:
-            print(dailyClosingPrices)
+            #print(dailyClosingPrices)
             stdDeviation = np.std(dailyClosingPrices)
             print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
             dailyClosingPrices = []
@@ -37,6 +37,6 @@ for line in sys.stdin:
         
 # Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth) and (year == cYear):
-    print(dailyClosingPrices)
+    #print(dailyClosingPrices)
     stdDeviation = np.std(dailyClosingPrices)
     print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
