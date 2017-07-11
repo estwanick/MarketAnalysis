@@ -14,7 +14,8 @@ for line in sys.stdin:
         rowDate = datetime.strptime(str(row[0]), '%Y-%m-%d')
         rowYear = str(rowDate.year)
         rowMonth = str(rowDate.month)
+        rowDay = str(rowDate.day)
         openingPrice = row[1]
         closingPrice = row[4]
-        print FILENAME + "," + rowYear + "," + rowMonth + "," + openingPrice + "," + closingPrice
+        print FILENAME + "," + rowYear + "," + rowMonth + "," + rowDay + "," + openingPrice + "," + closingPrice
     idx = idx + 1

@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 import sys
+import numpy as np
 
 ticker = None
 closingPrice = None
 month = None
 year = None
-sumClosingPrice = 0;
+stdDeviation = 0
+#Hold daily prices for that month
+dailyClosingPrices = []
 
 for line in sys.stdin:
     line = line.strip()
@@ -15,19 +18,25 @@ for line in sys.stdin:
     cTicker = lineParams[0]
     cYear = lineParams[1]
     cMonth = lineParams[2]
-    cOpeningPrice = float(lineParams[3])
-    cClosingPrice = float(lineParams[4])
+    cOpeningPrice = float(lineParams[4])
+    cClosingPrice = float(lineParams[5])
 
     if (ticker == cTicker) and (month == cMonth) and (year == cYear):
-        sumClosingPrice += cClosingPrice
+        dailyClosingPrices.append(cClosingPrice)
     else:
         if ticker:
-            print '%s,%s,%s,%s' % (ticker, year, month, sumClosingPrice)
+            print(dailyClosingPrices)
+            stdDeviation = np.std(dailyClosingPrices)
+            print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
+            dailyClosingPrices = []
+
         ticker = cTicker
         year = cYear
         month = cMonth
-
-# do not forget to output the last word if needed!
+        dailyClosingPrices.append(cClosingPrice)
+        
+# Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth) and (year == cYear):
-    print '%s,%s,%s,%s' % (ticker, year, month, sumClosingPrice)
-    
+    print(dailyClosingPrices)
+    stdDeviation = np.std(dailyClosingPrices)
+    print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
