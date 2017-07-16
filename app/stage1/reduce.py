@@ -36,7 +36,7 @@ for line in sys.stdin:
     else:
         if ticker:
             #print(dailyClosingPrices)
-            dates = np.reshape(dates, len(dates), 1)
+            #dates = np.reshape(dates, len(dates), 1)
             #fit the data for each model
             svrlin.fit(dates, dailyClosingPrices)
             svrpoly.fit(dates, dailyClosingPrices)
@@ -48,7 +48,7 @@ for line in sys.stdin:
             #create output strings for each
             linearOutput = 'linear: ' + linearVar + '; '
             polyOutput = 'poly: ' + polyVar + '; '
-            rbfOutput = 'rbf: ' + '; '
+            rbfOutput = 'rbf: ' + rbfVar + '; '
 
             #stdDeviation = np.std(dailyClosingPrices)
 
