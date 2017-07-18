@@ -37,14 +37,16 @@ for line in sys.stdin:
         if ticker:
             #print(dailyClosingPrices)
             #dates = np.reshape(dates, len(dates), 1)
+            dataX = np.array(dates).reshape((1,-1))
+            dataY = np.array(dailyClosingPrices).reshape((1,-1))
             #fit the data for each model
-            svrlin.fit(dates, dailyClosingPrices)
-            svrpoly.fit(dates, dailyClosingPrices)
-            svrrbf.fit(dates, dailyClosingPrices)
+            svrlin.fit(dataX, dataY)
+            svrpoly.fit(dataX, dataY)
+            svrrbf.fit(dataX, dataY)
             #calculate variance for each model
-            linearVar = svrlin.predict(dailyClosingPrices)
-            polyVar = svrpoly.predict(dailyClosingPrices)
-            rbfVar = svrrbf.predict(dailyClosingPrices)
+            linearVar = svrlin.predict(30)[0]
+            polyVar = svrpoly.predict(30)[0]
+            rbfVar = svrrbf.predict(30)[0]
             #create output strings for each
             linearOutput = 'linear: ' + linearVar + '; '
             polyOutput = 'poly: ' + polyVar + '; '
