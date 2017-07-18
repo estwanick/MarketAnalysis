@@ -2,5 +2,7 @@
 import sys
 
 for line in sys.stdin:
-    print line
+    line = line.strip()
+    lineParams = line.split(',')
+    print '%s,%s,%s,%s'% (lineParams[0], lineParams[1], lineParams[2], lineParams[3])
     
