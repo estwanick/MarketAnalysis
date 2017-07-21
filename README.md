@@ -34,3 +34,12 @@ stream.num.map.output.key.fields=5  -D map.output.key.field.separator=, -D mapre
 - FB 1 2014 predict this 
 
 # what is acceptable range? +-.5
+
+
+matt command:
+hadoop jar ../../usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=4 -D mapred.text.key.comparator.options='-k1,1 -k3,3n -k2,2n' -mapper marketanalysis/app/stage2/map.py  -input "stage1results/part-00000" -output "stage2results" && hdfs dfs -cat stage2results/part-00000 
+
+
+
+
+
