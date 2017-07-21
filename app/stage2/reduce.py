@@ -33,32 +33,25 @@ for line in sys.stdin:
         dates.append(cYear)
     else:
         if ticker:
-            #print(dailyClosingPrices)
-            #dates = np.reshape(dates, len(dates), 1)
-            print '----------------------begin-----------------------------------'
             dataX = np.array(dates).reshape((len(dates),-1))
             dataY = np.array(monthlyVolatilities)
-            #.reshape((len(dailyClosingPrices),-1))
             
-            #if len(dates) != len(monthlyVolatilities):
-                #dates[35] = 1999
-             #   print 'dates: ' + str(len(dates)) + ' ' + str(len(monthlyVolatilities))
             #fit the data for each model
             svrlin.fit(dataX, dataY)
             svrpoly.fit(dataX, dataY)
             svrrbf.fit(dataX, dataY)
             #calculate variance for each model
-            #linearVar = svrlin.predict(30)[0]
-            #polyVar = svrpoly.predict(30)[0]
-            #rbfVar = svrrbf.predict(30)[0]
+            linearVar = svrlin.predict(29)[0]
+            polyVar = svrpoly.predict(29)[0]
+            rbfVar = svrrbf.predict(29)[0]
             #create output strings for each
-            #linearOutput = 'linear: ' + linearVar + '; '
-            #polyOutput = 'poly: ' + polyVar + '; '
-            #rbfOutput = 'rbf: ' + rbfVar + '; '
+            linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
+            polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+            rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
 
             #stdDeviation = np.std(dailyClosingPrices)
 
-            #print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
+            print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
             monthlyVolatilities = []
             dates = []
 
@@ -71,18 +64,21 @@ for line in sys.stdin:
 if (ticker == cTicker) and (month == cMonth):
     #print(dailyClosingPrices)
     #stdDeviation = np.std(dailyClosingPrices)
-    print 'end'
+    print '--------last-----------'
+    dataX = np.array(dates).reshape((len(dates),-1))
+    dataY = np.array(monthlyVolatilities)
+            
     #fit the data for each model
-    #svrlin.fit(dates, dailyClosingPrices)
-    #svrpoly.fit(dates, dailyClosingPrices)
-    #svrrbf.fit(dates, dailyClosingPrices)
+    svrlin.fit(dataX, dataY)
+    svrpoly.fit(dataX, dataY)
+    svrrbf.fit(dataX, dataY)
     #calculate variance for each model
-    #linearVar = svrlin.predict(dailyClosingPrices)
-    #polyVar = svrpoly.predict(dailyClosingPrices)
-    #rbfVar = svrrbf.predict(dailyClosingPrices)
+    linearVar = svrlin.predict(29)[0]
+    polyVar = svrpoly.predict(29)[0]
+    rbfVar = svrrbf.predict(29)[0]
     #create output strings for each
-    #linearOutput = 'linear: ' + linearVar + '; '
-    #polyOutput = 'poly: ' + polyVar + '; '
-    #rbfOutput = 'rbf: ' + '; '
-    
-    #print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
+    linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
+    polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+    rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
+
+    print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
