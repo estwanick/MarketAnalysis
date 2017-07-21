@@ -40,6 +40,9 @@ matt command:
 hadoop jar ../../usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=4 -D mapred.text.key.comparator.options='-k1,1 -k3,3n -k2,2n' -mapper marketanalysis/app/stage2/map.py  -input "stage1results/part-00000" -output "stage2results" && hdfs dfs -cat stage2results/part-00000 
 
 
+matt stage1 command:
+hadoop jar ../../usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=6 -D stream.map.output.field.separator=, -D mapred.text.key.comparator.options='-k1,1 -k2,2n -k3,3n' -mapper marketanalysis/app/stage1/map.py -reducer marketanalysis/app/stage1/reduce.py -input "AAPL" -output "stage1results" && hdfs dfs -cat stage1results/part-00000 
+
 
 
 
