@@ -3,6 +3,7 @@
 import sys
 import numpy as np
 from sklearn.svm import SVR
+from sklearn import linear_model
 ticker = None
 closingPrice = None
 month = None
@@ -25,17 +26,22 @@ for line in sys.stdin:
     monthlyVolatility = lineParams[3]
     #initialize the svr objects for each model
     svrlin = SVR(kernel = 'linear', C=1e3)
-    svrrbf = SVR(kernel = 'rbf', C=1e3)
-    svrpoly = SVR(kernel = 'poly', C=1e3, max_iter=5)
-    
+    svrrbf = SVR(kernel = 'rbf', C=1000, gamma=10)
+    svrpoly = SVR(kernel = 'poly', C=1000, gamma=10, max_iter=15, degree=3)
+    lm = linear_model.LinearRegression()
+
     if (ticker == cTicker) and (month == cMonth):
         monthlyVolatilities.append(monthlyVolatility)
         dates.append(cYear)
     else:
         if ticker:
-            dataX = np.array(dates).reshape((len(dates),-1))
-            dataY = np.array(monthlyVolatilities)
+            dataX = np.array(dates).astype(np.float).reshape((len(dates),-1))
+            dataY = np.array(monthlyVolatilities).astype(np.float)
             
+            lm.fit(dataX, dataY)
+            orgLm = lm.predict(2016)
+            orgLmOutput = ('%s,%s,%s') % ('Original linear: ', orgLm, '; ')
+
             #fit the data for each model
             svrlin.fit(dataX, dataY)
             svrpoly.fit(dataX, dataY)
@@ -49,7 +55,7 @@ for line in sys.stdin:
             polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
             rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
             #harcode 2016 because that is what we are predicting
-            print '%s,%s,%s,%s,%s,%s' % (ticker, '2016', month, linearOutput, polyOutput, rbfOutput)
+            print '%s,%s,%s,%s,%s,%s,%s' % (ticker, '2016', month, linearOutput, orgLmOutput, polyOutput, rbfOutput)
             monthlyVolatilities = []
             dates = []
 
