@@ -1,17 +1,7 @@
 # MarketAnalysis
 
 #### Sample Command to run MapReduce Job
-hadoop jar /Users/michaelestwanick/hadoop-2.8.0/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar 
--D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator 
--D stream.map.output.field.separator=, 
--D stream.num.map.output.key.fields=5  
--D map.output.key.field.separator=, 
--D mapred.text.key.comparator.options='-k1,1 -k2,2n -k3,3n' 
--mapper app/stage1/map.py 
--reducer app/stage1/reduce.py 
--input "marketdata/FB.csv" 
--output "stage1results" 
-&& hdfs dfs -cat stage1results/part-00000
+hadoop jar /Users/michaelestwanick/hadoop-2.8.0/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=6  -D map.output.key.field.separator=, -D mapred.text.key.comparator.options='-k1,1 -k2,2n -k3,3n -k4,4n' -mapper app/stage1/map.py  -reducer app/stage1/reduce.py -input "marketdata/AAPL.csv" -output "stage1results" && hdfs dfs -cat stage1results/part-00000
 
 #include this at the top of python files
 #!/usr/bin/env python
@@ -34,3 +24,6 @@ stream.num.map.output.key.fields=5  -D map.output.key.field.separator=, -D mapre
 - FB 1 2014 predict this 
 
 # what is acceptable range? +-.5
+
+#Run Stage2
+hadoop jar /Users/michaelestwanick/hadoop-2.8.0/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=6  -D map.output.key.field.separator=, -D mapred.text.key.comparator.options='-k1,1 -k3,3n -k2,2n' -mapper app/stage2/map.py -input "stage1results/part-00000" -output "stage2results" && hdfs dfs -cat stage2results/part-00000

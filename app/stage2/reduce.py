@@ -25,8 +25,6 @@ for line in sys.stdin:
     monthlyVolatility = lineParams[3]
     #initialize the svr objects for each model
     svrlin = SVR(kernel = 'linear', C=1e3)
-    svrpoly = SVR(kernel = 'poly', C=1e3, degree = 2)
-    svrrbf = SVR(kernel = 'rbf', C=1e3, gamma = 0.1)
     
     if (ticker == cTicker) and (month == cMonth):
         monthlyVolatilities.append(monthlyVolatility)
@@ -38,20 +36,10 @@ for line in sys.stdin:
             
             #fit the data for each model
             svrlin.fit(dataX, dataY)
-            svrpoly.fit(dataX, dataY)
-            svrrbf.fit(dataX, dataY)
-            #calculate variance for each model
-            linearVar = svrlin.predict(29)[0]
-            polyVar = svrpoly.predict(29)[0]
-            rbfVar = svrrbf.predict(29)[0]
-            #create output strings for each
+
+            linearVar = svrlin.predict(2016)
             linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-            polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
-            rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
-
-            #stdDeviation = np.std(dailyClosingPrices)
-
-            print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
+            print '%s,%s,%s,%s' % (ticker, year, month, linearOutput)
             monthlyVolatilities = []
             dates = []
 
@@ -70,15 +58,10 @@ if (ticker == cTicker) and (month == cMonth):
             
     #fit the data for each model
     svrlin.fit(dataX, dataY)
-    svrpoly.fit(dataX, dataY)
-    svrrbf.fit(dataX, dataY)
     #calculate variance for each model
-    linearVar = svrlin.predict(29)[0]
-    polyVar = svrpoly.predict(29)[0]
-    rbfVar = svrrbf.predict(29)[0]
+    linearVar = svrlin.predict(2016)
     #create output strings for each
     linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-    polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
-    rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
 
-    print '%s,%s,%s,%s,%s,%s' % (ticker, year, month, linearOutput, polyOutput, rbfOutput)
+    print '%s,%s,%s,%s' % (ticker, year, month, linearOutput)
+
