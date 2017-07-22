@@ -25,6 +25,8 @@ for line in sys.stdin:
     monthlyVolatility = lineParams[3]
     #initialize the svr objects for each model
     svrlin = SVR(kernel = 'linear', C=1e3)
+    svrrbf = SVR(kernel = 'rbf', C=1e3, gamma = 0.1)
+    #svrpoly = SVR(kernel = 'poly', C=1e3, degree = 2)
     
     if (ticker == cTicker) and (month == cMonth):
         monthlyVolatilities.append(monthlyVolatility)
@@ -36,10 +38,18 @@ for line in sys.stdin:
             
             #fit the data for each model
             svrlin.fit(dataX, dataY)
-
+            #svrpoly.fit(dataX, dataY)
+            svrrbf.fit(dataX, dataY)
+            #calculate variance for each model
             linearVar = svrlin.predict(2016)
+            #polyVar = svrpoly.predict(2016)
+            rbfVar = svrrbf.predict(2016)
+            
             linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-            print '%s,%s,%s,%s' % (ticker, year, month, linearOutput)
+            #polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+            rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
+            #harcode 2016 because that is what we are predicting
+            print '%s,%s,%s,%s,%s' % (ticker, '2016', month, linearOutput, rbfOutput)
             monthlyVolatilities = []
             dates = []
 
@@ -48,20 +58,24 @@ for line in sys.stdin:
         month = cMonth
         monthlyVolatilities.append(monthlyVolatility)
         dates.append(cYear)
+
 # Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth):
-    #print(dailyClosingPrices)
-    #stdDeviation = np.std(dailyClosingPrices)
-    print '--------last-----------'
     dataX = np.array(dates).reshape((len(dates),-1))
     dataY = np.array(monthlyVolatilities)
             
     #fit the data for each model
     svrlin.fit(dataX, dataY)
-    #calculate variance for each model
+    #svrpoly.fit(dataX, dataY)
+    svrrbf.fit(dataX, dataY)
+    
     linearVar = svrlin.predict(2016)
-    #create output strings for each
+    #polyVar = svrpoly.predict(30)[0]
+    rbfVar = svrrbf.predict(2016)
+    
     linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-
-    print '%s,%s,%s,%s' % (ticker, year, month, linearOutput)
-
+    rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
+    #polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+    #harcode 2016 because that is what we are predicting
+    print '%s,%s,%s,%s,%s' % (ticker, '2016', month, linearOutput, rbfOutput)
+    
