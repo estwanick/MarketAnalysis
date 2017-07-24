@@ -7,7 +7,7 @@ ticker = None
 closingPrice = None
 month = None
 year = None
-stdDeviation = 0
+monthlyReturn = 0
 #Hold daily prices for that month
 dailyClosingPrices = []
 
@@ -18,16 +18,16 @@ for line in sys.stdin:
     cTicker = lineParams[0]
     cYear = lineParams[1]
     cMonth = lineParams[2]
-    cOpeningPrice = float(lineParams[4])
-    cClosingPrice = float(lineParams[5])
+    cClosingPrice = float(lineParams[4])
 
     if (ticker == cTicker) and (month == cMonth) and (year == cYear):
         dailyClosingPrices.append(cClosingPrice)
     else:
         if ticker:
-            #print(dailyClosingPrices)
-            stdDeviation = np.std(dailyClosingPrices)
-            print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
+            #print(dailyClosingPrices)\
+            #return the monthly returns
+            monthlyReturn = ( dailyClosingPrices[len(dailyClosingPrices) - 1] / dailyClosingPrices[0] ) - 1
+            print '%s,%s,%s,%s' % (ticker, year, month, monthlyReturn)
             dailyClosingPrices = []
 
         ticker = cTicker
@@ -38,5 +38,5 @@ for line in sys.stdin:
 # Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth) and (year == cYear):
     #print(dailyClosingPrices)
-    stdDeviation = np.std(dailyClosingPrices)
-    print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
+    monthlyReturn = ( dailyClosingPrices[len(dailyClosingPrices) - 1] / dailyClosingPrices[0] ) - 1
+    print '%s,%s,%s,%s' % (ticker, year, month, monthlyReturn)
