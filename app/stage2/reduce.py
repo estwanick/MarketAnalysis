@@ -35,15 +35,11 @@ for line in sys.stdin:
     if (ticker == cTicker) and (month == cMonth):
         monthlyReturns.append(monthlyReturn)
         dates.append(cYear)
-        print '%s,%s,%s,%s' % (cTicker, cYear, cMonth, monthlyReturn)
+        #print '%s,%s,%s,%s' % (cTicker, cYear, cMonth, monthlyReturn)
     else:
         if ticker:
             dataX = np.array(dates).reshape((len(dates),-1))
             dataY = np.array(monthlyReturns).astype(np.float)
-            
-            #lm.fit(dataX, dataY)
-            #orgLm = lm.predict(2016)
-            #orgLmOutput = ('%s,%s,%s') % ('Original linear: ', orgLm, '; ')
             
             #fit the data for each model
             svrlin.fit(dataX, dataY)
@@ -51,21 +47,15 @@ for line in sys.stdin:
             svrrbf.fit(dataX, dataY)
             #calculate variance for each model
             linearVar = svrlin.predict(2016)
-            polyVar = svrpoly.predict(6)
+            polyVar = svrpoly.predict(2016)
             rbfVar = svrrbf.predict(2016)
             
             linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
             polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
             rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
-            #harcode 2016 because that is what we are predicting
 
-          
+            print '%s,%s,%s,%s,%s' % (ticker, 'Prediction for ' + month + ' 2017', linearOutput, polyOutput, rbfOutput)
 
-            print '%s,%s,%s,%s,%s' % (ticker, '-------Prediction for ' + cMonth + ' 2017', linearOutput, polyOutput, rbfOutput)
-            print '%s,%s,%s,%s' % (cTicker, cYear, cMonth, monthlyReturn)
-
-            monthlyReturns = []
-            dates = []
 
         ticker = cTicker
         year = cYear
@@ -84,12 +74,12 @@ if (ticker == cTicker) and (month == cMonth):
     svrrbf.fit(dataX, dataY)
     
     linearVar = svrlin.predict(2016)
-    polyVar = svrpoly.predict(2017-8)
+    polyVar = svrpoly.predict(2016)
     rbfVar = svrrbf.predict(2016)
     
     linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
     rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
     polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
     #harcode 2016 because that is what we are predicting
-    print '%s,%s,%s,%s,%s' % (ticker, '-------Prediction for august 2018', linearOutput, polyOutput, rbfOutput)
+    print '%s,%s,%s,%s,%s' % (ticker, 'Prediction for ' + month + ' 2017', linearOutput, polyOutput, rbfOutput)
     
