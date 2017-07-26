@@ -5,7 +5,7 @@ from datetime import datetime
 PATH = os.environ['mapreduce_map_input_file']
 FILENAME = re.search('[^\/]+(\w+)$', PATH).group().replace('.csv', '')
 
-EXCLUDE_YEARS = ['2016', '2017']
+EXCLUDE_YEARS = ['2017']
 
 idx = 0
 for line in sys.stdin:
@@ -18,9 +18,9 @@ for line in sys.stdin:
         rowMonth = str(rowDate.month)
         rowDay = str(rowDate.day)
         closingPrice = row[4]
-        #Exclude years 2016,2017
-        #if rowYear not in EXCLUDE_YEARS:
-        print FILENAME + "," + rowYear + "," + rowMonth + "," + rowDay + "," + closingPrice
+        #Exclude year(s) 2017
+        if rowYear not in EXCLUDE_YEARS and int(rowYear) >= 2010:
+            print FILENAME + "," + rowYear + "," + rowMonth + "," + rowDay + "," + closingPrice
 
     idx = idx + 1
 
