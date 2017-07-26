@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from sklearn.svm import SVR
 from sklearn import linear_model
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 ticker = None
 closingPrice = None
@@ -30,7 +30,7 @@ for line in sys.stdin:
     svrlin = SVR(kernel = 'linear', C=1e3)
     svrrbf = SVR(kernel = 'rbf', C=1e3, gamma=10)
     svrpoly = SVR(kernel = 'poly', C=1e3, gamma=10, max_iter=15, degree=2)
-    #lm = linear_model.LinearRegression()
+    lm = linear_model.LinearRegression()
 
     if (ticker == cTicker) and (month == cMonth):
         monthlyReturns.append(monthlyReturn)
@@ -38,23 +38,26 @@ for line in sys.stdin:
         #print '%s,%s,%s,%s' % (cTicker, cYear, cMonth, monthlyReturn)
     else:
         if ticker:
-            dataX = np.array(dates).reshape((len(dates),-1))
-            dataY = np.array(monthlyReturns).astype(np.float)
+            returnsWithout2016 = monthlyReturns[ 0 : len(monthlyReturns)-1]
+            datesWithout2016 = dates [ 0 : len(dates) -1]
+            dataX = np.array(datesWithout2016).reshape((len(datesWithout2016),-1))
+            dataY = np.array(returnsWithout2016).astype(np.float)
             
             #fit the data for each model
             svrlin.fit(dataX, dataY)
             svrpoly.fit(dataX, dataY)
             svrrbf.fit(dataX, dataY)
+            lm.fit(dataX, dataY)
             #calculate variance for each model
-            linearVar = svrlin.predict(2016)
-            polyVar = svrpoly.predict(2016)
-            rbfVar = svrrbf.predict(2016)
-            
-            linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-            polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
-            rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
-
-            print '%s,%s,%s,%s,%s' % (ticker, 'Prediction for ' + month + ' 2017', linearOutput, polyOutput, rbfOutput)
+            linearVar = svrlin.predict(2016)[0]
+            polyVar = svrpoly.predict(2016)[0]
+            rbfVar = svrrbf.predict(2016)[0]
+            lmVar = lm.predict(2016)[0]
+            #linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
+            #polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+            #rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
+            actual2016 = monthlyReturns[len(monthlyReturns) -1]
+            print '%s,%s,%s,%s,%s,%s,%s,%s' % (ticker, month, '2016', actual2016, linearVar, polyVar, rbfVar, lmVar)
 
 
         ticker = cTicker
@@ -65,21 +68,24 @@ for line in sys.stdin:
 
 # Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth):
-    dataX = np.array(dates).reshape(len(dates),-1)
-    dataY = np.array(monthlyReturns)
+    returnsWithout2016 = monthlyReturns[ 0 : len(monthlyReturns)-1]
+    datesWithout2016 = dates [ 0 : len(dates) -1]
+    dataX = np.array(datesWithout2016).reshape((len(datesWithout2016),-1))
+    dataY = np.array(returnsWithout2016).astype(np.float)
             
     #fit the data for each model
     svrlin.fit(dataX, dataY)
     svrpoly.fit(dataX, dataY)
     svrrbf.fit(dataX, dataY)
-    
-    linearVar = svrlin.predict(2016)
-    polyVar = svrpoly.predict(2016)
-    rbfVar = svrrbf.predict(2016)
-    
-    linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-    rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
-    polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
-    #harcode 2016 because that is what we are predicting
-    print '%s,%s,%s,%s,%s' % (ticker, 'Prediction for ' + month + ' 2017', linearOutput, polyOutput, rbfOutput)
-    
+    lm.fit(dataX, dataY)
+    #calculate variance for each model
+    linearVar = svrlin.predict(2016)[0]
+    polyVar = svrpoly.predict(2016)[0]
+    rbfVar = svrrbf.predict(2016)[0]
+    lmVar = lm.predict(2016)[0]
+    #linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
+    #polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
+    #rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
+    actual2016 = monthlyReturns[len(monthlyReturns) -1]
+    print '%s,%s,%s,%s,%s,%s,%s,%s' % (ticker, month, '2016', actual2016, linearVar, polyVar, rbfVar, lmVar)
+
