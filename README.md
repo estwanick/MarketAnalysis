@@ -21,7 +21,23 @@ hdfs dfs -rm -r stage3results
 hadoop jar /Users/michaelestwanick/hadoop-2.8.0/share/hadoop/tools/lib/hadoop-streaming-2.8.0.jar -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=8  -D map.output.key.field.separator=, -D mapred.text.key.comparator.options='-k1,1 -k3,3n -k2,2n' -mapper app/stage3/map.py -reducer app/stage2/reduce.py -input "stage2results/part-00000" -output "stage3results" && hdfs dfs -cat stage3results/part-00000
 
 
+** Summary of changes
+Stage 2 changes ------
+use all models to predict 2015
 
+use all models to predict 2016
+
+output 2015 results ... output 2016 results
+
+Stage 3 changes -------
+input output 2015 results ... output 2016 results
+
+determine which model was the best for 2015
+
+compare that model to the respective model for 2016 
+- ie if LinearRegression won for 2015, compare that to the result of LinearRegression for 2016
+
+using original data we predict 2015 and 2016
 
 
 
