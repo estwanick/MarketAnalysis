@@ -16,6 +16,9 @@ for line in sys.stdin:
     line = line.strip()
     lineParams = line.split(',')
 
+    #Data conract
+    #(ticker, month, '2015', actual2015, linearVar2015, polyVar2015, rbfVar2015, lmVar2015, actual2016, linearVar2016, polyVar2016, rbfVar2016, lmVar2016)
+
     cTicker = lineParams[0]
     cYear = lineParams[2]
     cMonth = lineParams[1]
@@ -26,6 +29,12 @@ for line in sys.stdin:
     polyScore = float(lineParams[5])
     rbfScore = float(lineParams[6])
     lmScore = float(lineParams[7])
+
+    actual2016 =  float(lineParams[8])
+    linearScore2016 = float(lineParams[9])
+    polyScore2016 = float(lineParams[10])
+    rbfScore2016 = float(lineParams[11])
+    lmScore2016 = float(lineParams[12])
 
     if (ticker == cTicker) and (year == cYear):
         cumulLinear = cumulLinear + (actual - linearScore)
@@ -51,8 +60,22 @@ for line in sys.stdin:
                     newMinValue['value'] = value
                     newMinValue['model'] = key
 
-            print newMinValue['model'] + ': ' + str(newMinValue['value'])
-            print '%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, month, year, actual, cumulLinear, cumulPoly, cumulRBF, cumulLM)
+            mostAccurateModel2015 = newMinValue['model']
+            mostAccurateModelvalue2015 = newMinValue['value']
+            predictionFor2016 = 1000 #Assume worst case
+            #Fetch the corresponding model for 2016
+            if(mostAccurateModel2015 == 'cumulLinear'):
+                predictionFor2016 = linearScore2016
+            elif(mostAccurateModel2015 == 'cumulPoly'):
+                predictionFor2016 = polyScore2016
+            elif(mostAccurateModel2015 == 'cumulRBF'):
+                predictionFor2016 = rbfScore2016
+            elif(mostAccurateModel2015 == 'cumulLM'):
+                predictionFor2016 = lmScore2016
+            else:
+                predictionFor2016 = "***ERROR***"
+
+            print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'How close was it: ', actual2016 - predictionFor2016)
 
 
         ticker = cTicker
@@ -81,5 +104,19 @@ if (ticker == cTicker) and (year == cYear):
             newMinValue['value'] = value
             newMinValue['model'] = key
 
-    print newMinValue['model'] + ': ' + str(newMinValue['value'])
-    print '%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, month, year, actual, cumulLinear, cumulPoly, cumulRBF, cumulLM)
+    mostAccurateModel2015 = newMinValue['model']
+    mostAccurateModelvalue2015 = newMinValue['value']
+    predictionFor2016 = 1000 #Assume worst case
+    #Fetch the corresponding model for 2016
+    if(mostAccurateModel2015 == 'cumulLinear'):
+        predictionFor2016 = linearScore2016
+    elif(mostAccurateModel2015 == 'cumulPoly'):
+        predictionFor2016 = polyScore2016
+    elif(mostAccurateModel2015 == 'cumulRBF'):
+        predictionFor2016 = rbfScore2016
+    elif(mostAccurateModel2015 == 'cumulLM'):
+        predictionFor2016 = lmScore2016
+    else:
+        predictionFor2016 = "***ERROR***"
+
+    print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'How close was it: ', actual2016 - predictionFor2016)

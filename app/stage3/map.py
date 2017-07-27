@@ -4,5 +4,5 @@ import sys
 for line in sys.stdin:
     line = line.strip()
     lineParams = line.split(',')
-    print '%s,%s,%s,%s,%s,%s,%s,%s,'% (lineParams[0], lineParams[1], lineParams[2], lineParams[3], lineParams[4], lineParams[5], lineParams[6], lineParams[7])
+    print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' % (lineParams[0], lineParams[1], lineParams[2], lineParams[3], lineParams[4], lineParams[5], lineParams[6], lineParams[7], lineParams[8], lineParams[9], lineParams[10], lineParams[11], lineParams[12])
     
