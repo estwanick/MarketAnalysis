@@ -23,8 +23,8 @@ for line in sys.stdin:
     lineParams = line.replace('\t', ',').split(',')
 
     cTicker = lineParams[0]
-    cYear = lineParams[1]
-    cMonth = lineParams[2]
+    cYear = lineParams[2]
+    cMonth = lineParams[1]
     monthlyReturn = lineParams[3]
     #initialize the svr objects for each model
     svrlin = SVR(kernel = 'linear', C=1e3)
