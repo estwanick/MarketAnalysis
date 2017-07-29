@@ -29,7 +29,7 @@ for line in sys.stdin:
     else:
         if ticker:
             for key in unsortedDays:
-                dailyClosingPrices.append(unsortedDays[key])s
+                dailyClosingPrices.append(unsortedDays[key])
             #return the monthly returns
             monthlyReturn = ( dailyClosingPrices[len(dailyClosingPrices) - 1] / dailyClosingPrices[0] ) - 1
             print '%s,%s,%s,%s' % (ticker, year, month, monthlyReturn)
