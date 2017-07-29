@@ -14,7 +14,7 @@ newMinValue = {}
 
 for line in sys.stdin:
     line = line.strip()
-    lineParams = line.split(',')
+    lineParams = line.replace('\t', ',').split(',')
 
     #Data conract
     #(ticker, month, '2015', actual2015, linearVar2015, polyVar2015, rbfVar2015, lmVar2015, actual2016, linearVar2016, polyVar2016, rbfVar2016, lmVar2016)
@@ -75,7 +75,7 @@ for line in sys.stdin:
             else:
                 predictionFor2016 = "***ERROR***"
 
-            print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'How close was it: ', actual2016 - predictionFor2016)
+            print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
 
 
         ticker = cTicker

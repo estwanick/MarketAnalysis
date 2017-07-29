@@ -7,36 +7,42 @@ ticker = None
 closingPrice = None
 month = None
 year = None
-stdDeviation = 0
+monthlyReturn = 0
 #Hold daily prices for that month
 dailyClosingPrices = []
+unsortedDays = {}
 
 for line in sys.stdin:
     line = line.strip()
-    lineParams = line.split(',')
+    lineParams = line.replace('\t', ',').split(',')
 
     cTicker = lineParams[0]
     cYear = lineParams[1]
     cMonth = lineParams[2]
-    cOpeningPrice = float(lineParams[4])
-    cClosingPrice = float(lineParams[5])
+    cClosingPrice = float(lineParams[4])
+    cDay = lineParams[3]
 
+    # print '%s,%s,%s,%s' % (ticker, year, month, cDay)
     if (ticker == cTicker) and (month == cMonth) and (year == cYear):
-        dailyClosingPrices.append(cClosingPrice)
+        #dailyClosingPrices.append(cClosingPrice)
+        unsortedDays[int(cDay)] = cClosingPrice
     else:
         if ticker:
-            #print(dailyClosingPrices)
-            stdDeviation = np.std(dailyClosingPrices)
-            print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
+            for key in unsortedDays:
+                dailyClosingPrices.append(unsortedDays[key])s
+            #return the monthly returns
+            monthlyReturn = ( dailyClosingPrices[len(dailyClosingPrices) - 1] / dailyClosingPrices[0] ) - 1
+            print '%s,%s,%s,%s' % (ticker, year, month, monthlyReturn)
             dailyClosingPrices = []
+            unsortedDays = {}
 
         ticker = cTicker
         year = cYear
         month = cMonth
-        dailyClosingPrices.append(cClosingPrice)
+        unsortedDays[int(cDay)] = cClosingPrice
         
-# Just ignore last month for now
 if (ticker == cTicker) and (month == cMonth) and (year == cYear):
-    #print(dailyClosingPrices)
-    stdDeviation = np.std(dailyClosingPrices)
-    print '%s,%s,%s,%s' % (ticker, year, month, stdDeviation)
+    for key in unsortedDays:
+                dailyClosingPrices.append(unsortedDays[key])
+    monthlyReturn = ( dailyClosingPrices[len(dailyClosingPrices) - 1] / dailyClosingPrices[0] ) - 1
+    print '%s,%s,%s,%s' % (ticker, year, month, monthlyReturn)

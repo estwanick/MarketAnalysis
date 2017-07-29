@@ -20,7 +20,7 @@ monthlyReturns = []
 dates = []
 for line in sys.stdin:
     line = line.strip()
-    lineParams = line.split(',')
+    lineParams = line.replace('\t', ',').split(',')
 
     cTicker = lineParams[0]
     cYear = lineParams[1]

@@ -1,0 +1,5 @@
+# Stage 1
+hadoop-streaming -D mapred.reduce.tasks=1 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=6 -D map.output.key.field.separator=, -D "mapred.text.key.comparator.options=-k1,1 -k2,2n -k3,3n -k4" -files s3://monthly-volatility-mr/stage1/map.py,s3://monthly-volatility-mr/stage1/reduce.py -mapper map.py -reducer reduce.py -input s3://monthly-volatility-data/tech50/ -output s3://monthly-volatility-output/results-1
+
+# Stage 2
+hadoop-streaming -D mapred.reduce.tasks=1 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=6 -D map.output.key.field.separator=, -D "mapred.text.key.comparator.options=-k1,1 -k3,3n -k2,2n" -files s3://monthly-volatility-mr/stage2/map.py,s3://monthly-volatility-mr/stage2/reduce.py -mapper map.py -reducer reduce.py -input s3://monthly-volatility-output/results-1 -output s3://monthly-volatility-output/results-2
