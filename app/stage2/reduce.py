@@ -4,7 +4,21 @@ import sys
 import numpy as np
 from sklearn.svm import SVR
 from sklearn import linear_model
-#import matplotlib.pyplot as plt
+from operator import itemgetter, attrgetter, methodcaller
+
+outterList = []
+for line in sys.stdin:
+    line = line.strip()
+    lineParams = line.replace('\t', ',').split(',')
+    outterList.append((
+        lineParams[0],
+        int(lineParams[1]),
+        int(lineParams[2]),
+        lineParams[3]
+    ))
+
+
+newList = sorted(outterList, key=itemgetter(0, 1, 2) )
 
 ticker = None
 closingPrice = None
@@ -15,16 +29,15 @@ linearVar = 0
 polyVar = 0
 rbfVar = 0
 
+
+
 #Hold daily prices for that month
 monthlyReturns = []
 dates = []
-for line in sys.stdin:
-    line = line.strip()
-    lineParams = line.replace('\t', ',').split(',')
-
+for lineParams in newList:
     cTicker = lineParams[0]
-    cYear = lineParams[2]
     cMonth = lineParams[1]
+    cYear = lineParams[2]
     monthlyReturn = lineParams[3]
     #initialize the svr objects for each model
     svrlin = SVR(kernel = 'linear', C=1e3)
@@ -45,7 +58,8 @@ for line in sys.stdin:
             returnsMinusLast2 = monthlyReturns[ 0 : len(monthlyReturns)-2]
             datesWithoutLast2 = dates[ 0 : len(dates)-2]
             returnsWithout2016 = monthlyReturns[ 0 : len(monthlyReturns)-1]
-            datesWithout2016 = dates [ 0 : len(dates) -1]
+            datesWithout2016 = dates[ 0 : len(dates) -1]
+
             dataX = np.array(datesWithout2016).reshape((len(datesWithout2016),-1))
             dataY = np.array(returnsWithout2016).astype(np.float)
             dataX2 = np.array(datesWithoutLast2).reshape((len(datesWithoutLast2),-1))
@@ -77,7 +91,6 @@ for line in sys.stdin:
             actual2016 = monthlyReturns[len(monthlyReturns) -1]
             actual2015 = monthlyReturns[len(monthlyReturns) -2]
             print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' % (ticker, month, '2015', actual2015, linearVar2015, polyVar2015, rbfVar2015, lmVar2015, actual2016, linearVar2016, polyVar2016, rbfVar2016, lmVar2016)
-
 
         ticker = cTicker
         year = cYear
@@ -116,9 +129,6 @@ if (ticker == cTicker) and (month == cMonth):
     rbfVar2015 = svrrbf.predict(2015)[0]
     lmVar2015 = lm.predict(2015)[0]
 
-    #linearOutput = '%s%s%s' % ('linear: ', linearVar, '; ')
-    #polyOutput = '%s%s%s' % ('poly: ', polyVar, '; ')
-    #rbfOutput = '%s%s%s' % ('rbf: ', rbfVar, '; ')
     actual2016 = monthlyReturns[len(monthlyReturns) -1]
     actual2015 = monthlyReturns[len(monthlyReturns) -2]
     print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' % (ticker, month, '2015', actual2015, linearVar2015, polyVar2015, rbfVar2015, lmVar2015, actual2016, linearVar2016, polyVar2016, rbfVar2016, lmVar2016)
