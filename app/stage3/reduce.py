@@ -11,6 +11,7 @@ cumulLM = 0.0
 
 modelResults = {}
 newMinValue = {}
+records2016 = []
 
 for line in sys.stdin:
     line = line.strip()
@@ -35,14 +36,16 @@ for line in sys.stdin:
     polyScore2016 = float(lineParams[10])
     rbfScore2016 = float(lineParams[11])
     lmScore2016 = float(lineParams[12])
-
-    if (ticker == cTicker) and (year == cYear):
+    
+    if ticker == cTicker:
         cumulLinear = cumulLinear + (actual - linearScore)
         cumulPoly = cumulPoly + (actual - polyScore)
         cumulRBF = cumulRBF + (actual - rbfScore)
         cumulLM = cumulLM + (actual - lmScore)
+        recline = '%s,%s,%s,%s,%s'%(actual2016, linearScore2016, polyScore2016, rbfScore2016, lmScore2016)
+        records2016.append(recline)
     else:
-        if ticker:
+        if ticker or ticker == None:
             cumulLinear = math.fabs(cumulLinear)
             cumulPoly = math.fabs(cumulPoly)
             cumulRBF = math.fabs(cumulRBF)
@@ -77,6 +80,27 @@ for line in sys.stdin:
 
             print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
 
+            counter2016 = 0
+            for line2016 in records2016:
+                counter2016 = counter2016 + 1
+                splitLine = line2016.split(',')
+                if(mostAccurateModel2015 == 'cumulLinear'):
+                    pred2016 = splitLine[1]
+                elif(mostAccurateModel2015 == 'cumulPoly'):
+                    pred2016 = splitLine[2]
+                elif(mostAccurateModel2015 == 'cumulRBF'):
+                    pred2016 = splitLine[3]
+                elif(mostAccurateModel2015 == 'cumulLM'):
+                    pred = splitLine[4]
+                else:
+                    predictionFor2016 = "***ERROR***"
+                actual16 = splitLine[0]
+                if(predictionFor2016 != "***ERROR***"):
+                    print '%s,%s,%s,%s,%s'%('2016', counter2016, actual16, pred2016, 'Residual: ' + str(float(actual16)  - float(pred2016)))
+                else:
+                    print '%s,%s,%s'%('2016', counter2016, "***Error***")
+            records2016 = []
+            records2016.append('%s,%s,%s,%s,%s'%(actual2016, linearScore2016, polyScore2016, rbfScore2016, lmScore2016))
 
         ticker = cTicker
         year = cYear
@@ -86,7 +110,7 @@ for line in sys.stdin:
         cumulRBF = 0.0
         cumulLM = 0.0
 
-if (ticker == cTicker) and (year == cYear):
+if (ticker == cTicker):
     cumulLinear = math.fabs(cumulLinear)
     cumulPoly = math.fabs(cumulPoly)
     cumulRBF = math.fabs(cumulRBF)
@@ -119,4 +143,26 @@ if (ticker == cTicker) and (year == cYear):
     else:
         predictionFor2016 = "***ERROR***"
 
-    print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'How close was it: ', actual2016 - predictionFor2016)
+    print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
+
+    counter2016 = 13
+    for line2016 in records2016:
+        counter2016 = counter2016 - 1
+        splitLine = line2016.split(',')
+        if(mostAccurateModel2015 == 'cumulLinear'):
+            pred2016 = splitLine[1]
+        elif(mostAccurateModel2015 == 'cumulPoly'):
+            pred2016 = splitLine[2]
+        elif(mostAccurateModel2015 == 'cumulRBF'):
+            pred2016 = splitLine[3]
+        elif(mostAccurateModel2015 == 'cumulLM'):
+            pred = splitLine[4]
+        else:
+            predictionFor2016 = "***ERROR***"
+        actual16 = splitLine[0]
+        if(predictionFor2016 != "***ERROR***"):
+            print '%s,%s,%s,%s,%s'%('2016', counter2016, actual16, pred2016, 'Residual: ' + str(float(actual16)  - float(pred2016)))
+        else:
+            print '%s,%s,%s'%('2016', counter2016, "***Error***")
+    records2016 = []
+    records2016.append('%s,%s,%s,%s,%s'%(actual2016, linearScore2016, polyScore2016, rbfScore2016, lmScore2016))
