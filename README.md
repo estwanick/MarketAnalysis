@@ -24,7 +24,7 @@ Use Hadoop MadReduce to predict the Monthly Stock Volatility of a set a stocks
 
 #### Stage 1
 
-hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D map.output.key.field.separator=, -D mapred.text.key.comparator.options=-k1,1 -files s3://monthly-volatility-mapreduce/stage1/map.py,s3://monthly-volatility-mapreduce/stage1/reduce.py -mapper map.py -reducer reduce.py -input s3://monthly-volatility-data/tech50 -output s3://monthly-volatility-output/stage1results
+hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D map.output.key.field.separator=, -files s3://monthly-volatility-mapreduce/stage1/map.py,s3://monthly-volatility-mapreduce/stage1/reduce.py -mapper map.py -reducer reduce.py -input s3://monthly-volatility-data/tech50 -output s3://monthly-volatility-output/stage1results
 
 #### Stage 2
 
@@ -35,11 +35,79 @@ hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.
 hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator -D stream.map.output.field.separator=, -D stream.num.map.output.key.fields=1 -D map.output.key.field.separator=, -files s3://monthly-volatility-mapreduce/stage3/map.py,s3://monthly-volatility-mapreduce/stage3/reduce.py -mapper map.py -reducer reduce.py -input s3://monthly-volatility-output/stage2results -output s3://monthly-volatility-output/stage3results
 
 
+### Results
+
+#### Cluster with 1 Master node and 4 Slave Nodes on Top 100 technology companies
+    - Stage 1 
+        - Execution time 2 minutes
+    - Stage 2
+        - Execution time 1 minute
+    - Stage 3
+        - Execution time 1 minute
+
+#### Cluster with 1 Master node and 8 Slave Nodes on Top 100 technology companies
+    - Stage 1 
+        - Execution time 1 minute
+    - Stage 2
+        - Execution time 1 minute 
+    - Stage 3
+        - Execution time less than 1 minute
+
+----------------------------------------------------------------------------------
+
+#### Cluster with 1 Master node and 4 Slave Nodes on Top 400+ technology companies
+    - Stage 1 
+        - Execution time 7 minutes
+    - Stage 2
+        - Execution time 1 minute
+    - Stage 3
+        - Execution time 1 minute 
+
+#### Cluster with 1 Master node and 8 Slave Nodes on Top 400+ technology companies
+    - Stage 1 
+        - Execution time 4 minutes
+    - Stage 2
+        - Execution time  1 minute
+    - Stage 3
+        - Execution time 48 seconds
+
+----------------------------------------------------------------------------------
+
+### Fault Tolerance 
+
+#### Description of test 1
+- Cluster with 1 Master node and 4 Slave Nodes on Top 400+ technology companies
+- Run Stage 1
+- 2 nodes fail
+- EMR replaces with 2 new nodes
+
+#### Results
+- Execution time 19 minutes
+
+#### Description of test 2
+- Cluster with 1 Master node and 4 Slave Nodes on Top 400+ technology companies
+- Run Stage 1
+- All data nodes fail (4 nodes)
+
+#### Results
+- (Job failed)All slaves in the job flow were terminated 
+
+#### Description of test 3
+- Cluster with 1 Master node and 4 Slave Nodes on Top 400+ technology companies
+- Run Stage 1
+- Name node fails
+
+#### Results
+- (Job failed) The master node was terminated and cannot recover 
+
+----------------------------------------------------------------------------------
+
 ### Other information
 
 #### S3 Data Resources
 - https://s3.amazonaws.com/monthly-volatility-data/tech50/
 - https://s3.amazonaws.com/monthly-volatility-data/tech100/
+- https://s3.amazonaws.com/monthly-volatility-data/tech400/
 
 #### Amazon EMR Settings
 - S3 Bucket Name: https://s3.console.aws.amazon.com/s3/buckets/monthly-volatility-mapreduce/
