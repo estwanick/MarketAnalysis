@@ -78,7 +78,7 @@ for line in sys.stdin:
             else:
                 predictionFor2016 = "***ERROR***"
 
-            print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
+            #print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
 
             counter2016 = 0
             for line2016 in records2016:
@@ -96,7 +96,8 @@ for line in sys.stdin:
                     predictionFor2016 = "***ERROR***"
                 actual16 = splitLine[0]
                 if(predictionFor2016 != "***ERROR***"):
-                    print '%s,%s,%s,%s,%s'%('           2016', counter2016, actual16, pred2016, 'Residual: ' + str(float(actual16)  - float(pred2016)))
+                    #ticker, year, month, actual, prediction, residual
+                    print '%s,%s,%s,%s,%s,%s'%(ticker, '2016', counter2016, actual16, pred2016, str(float(actual16)  - float(pred2016)))
                 else:
                     print '%s,%s,%s'%('2016', counter2016, "***Error***")
             records2016 = []
@@ -143,7 +144,7 @@ if (ticker == cTicker):
     else:
         predictionFor2016 = "***ERROR***"
 
-    print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
+    #print '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s'% (ticker, '2015', actual, mostAccurateModel2015, mostAccurateModelvalue2015, '2016', actual2016, predictionFor2016, 'Accuracy:', actual2016 - predictionFor2016)
 
     counter2016 = 13
     for line2016 in records2016:
@@ -161,7 +162,7 @@ if (ticker == cTicker):
             predictionFor2016 = "***ERROR***"
         actual16 = splitLine[0]
         if(predictionFor2016 != "***ERROR***"):
-            print '%s,%s,%s,%s,%s'%('           2016', counter2016, actual16, pred2016, 'Residual: ' + str(float(actual16)  - float(pred2016)))
+            print '%s,%s,%s,%s,%s,%s'%(ticker, '2016', counter2016, actual16, pred2016, str(float(actual16)  - float(pred2016)))
         else:
             print '%s,%s,%s'%('2016', counter2016, "***Error***")
     records2016 = []
