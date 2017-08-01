@@ -1,6 +1,7 @@
 /companies
 /martketdata
 /results
+/stage*
 *.csv
 
 # Byte-compiled / optimized / DLL files
