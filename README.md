@@ -37,6 +37,23 @@ hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.
 
 ### Results
 
+#### Cluster with 1 Master node and 4 Slave Nodes on Top 50 technology companies
+    - Stage 1 
+        - Execution time 1 minute
+    - Stage 2
+        - Execution time 1 minute
+    - Stage 3
+        - Execution time 1 minute
+
+#### Cluster with 1 Master node and 8 Slave Nodes on Top 50 technology companies
+    - Stage 1 
+        - Execution time 1 minutes
+    - Stage 2
+        - Execution time 1 minutes
+    - Stage 3
+        - Execution time 1 minutes
+
+
 #### Cluster with 1 Master node and 4 Slave Nodes on Top 100 technology companies
     - Stage 1 
         - Execution time 2 minutes
@@ -53,7 +70,6 @@ hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.
     - Stage 3
         - Execution time less than 1 minute
 
-----------------------------------------------------------------------------------
 
 #### Cluster with 1 Master node and 4 Slave Nodes on Top 400+ technology companies
     - Stage 1 
