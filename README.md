@@ -118,7 +118,7 @@ hadoop-streaming -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.
 
 ----------------------------------------------------------------------------------
 
-### Other information
+### Other information (S3 Buckets are no longer public)
 
 #### S3 Data Resources
 - https://s3.amazonaws.com/monthly-volatility-data/tech50/
